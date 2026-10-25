@@ -14,5 +14,5 @@
       "@wdio/browserstack-service"
     ]
   },
-  "include": ["config/**/*.ts", "test/**/*.ts", "solutions/**/*.ts"]
+  "include": ["config/**/*.ts", "test/**/*.ts"]
 }
