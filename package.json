@@ -10,11 +10,11 @@
   "scripts": {
     "postinstall": "node scripts/download-app.mjs",
     "download:app": "node scripts/download-app.mjs",
-    "test": "wdio run config/wdio.android.conf.ts --exclude test/specs/lab.spec.ts",
+    "test": "wdio run config/wdio.android.conf.ts --exclude ../test/specs/lab.spec.ts",
     "test:login": "wdio run config/wdio.android.conf.ts --spec test/specs/login.spec.ts",
     "test:example": "wdio run config/wdio.android.conf.ts --spec test/specs/example.spec.ts",
     "test:lab":"wdio run config/wdio.android.conf.ts --spec test/specs/lab.spec.ts",
-    "test:bs": "wdio run config/wdio.browserstack.conf.ts --exclude test/specs/lab.spec.ts",
+    "test:bs": "wdio run config/wdio.browserstack.conf.ts --spec test/specs/login.spec.ts",
     "typecheck": "tsc --noEmit"
   },
   "devDependencies": {

@@ -1,15 +1,23 @@
+import { existsSync } from 'node:fs';
 import { config as shared, APK_PATH } from './wdio.shared.conf.js';
 
 /**
  * Same tests, real devices in the BrowserStack cloud.
  *
- *   export BROWSERSTACK_USERNAME=...      (Windows PowerShell: $env:BROWSERSTACK_USERNAME="...")
- *   export BROWSERSTACK_ACCESS_KEY=...
+ *   cp .env.example .env                  (then fill in your credentials; .env is git-ignored)
  *   npm run test:bs
+ *
+ * Variables already set in the shell (e.g. CI secrets) take precedence over .env.
  *
  * The BrowserStack service uploads ./apps/*.apk for you. In CI you can instead pass an
  * already uploaded app with BROWSERSTACK_APP_ID=bs://<hash>.
  */
+if (existsSync('.env')) process.loadEnvFile('.env');
+
+if (!process.env.BROWSERSTACK_USERNAME || !process.env.BROWSERSTACK_ACCESS_KEY) {
+  throw new Error('BROWSERSTACK_USERNAME and BROWSERSTACK_ACCESS_KEY must be set (see .env.example).');
+}
+
 const buildName = process.env.BROWSERSTACK_BUILD_NAME ?? `appium-training-${new Date().toISOString().slice(0, 16)}`;
 
 const bstackOptions = (deviceName: string, platformVersion: string) => ({
