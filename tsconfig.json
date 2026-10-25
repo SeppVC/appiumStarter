@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "es2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "types": [
+      "node",
+      "@wdio/globals/types",
+      "@wdio/mocha-framework",
+      "expect-webdriverio",
+      "@wdio/browserstack-service"
+    ]
+  },
+  "include": ["config/**/*.ts", "test/**/*.ts", "solutions/**/*.ts"]
+}

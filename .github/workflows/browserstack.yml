@@ -1,0 +1,35 @@
+# Runs the suite on real devices in BrowserStack on every push / pull request.
+# Needs two repository secrets (Settings > Secrets and variables > Actions):
+#   BROWSERSTACK_USERNAME, BROWSERSTACK_ACCESS_KEY
+name: Mobile tests (BrowserStack)
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  browserstack:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      # postinstall downloads the demo APK into ./apps
+      - run: npm ci
+
+      - name: Type check
+        run: npm run typecheck
+
+      - name: Run tests on BrowserStack
+        run: npm run test:bs
+        env:
+          BROWSERSTACK_USERNAME: ${{ secrets.BROWSERSTACK_USERNAME }}
+          BROWSERSTACK_ACCESS_KEY: ${{ secrets.BROWSERSTACK_ACCESS_KEY }}
+          BROWSERSTACK_BUILD_NAME: ${{ github.workflow }} #${{ github.run_number }}

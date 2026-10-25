@@ -1,0 +1,6 @@
+node_modules/
+apps/*.apk
+logs/
+.env
+browserstack.err
+local.log

@@ -1,0 +1,49 @@
+# Alternative without a device cloud: boot an Android emulator inside GitHub Actions.
+# Slower and less realistic than real devices, but free. Start it manually from the Actions tab.
+name: Mobile tests (emulator in CI)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  emulator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+
+      - run: npm ci
+
+      - name: Install Appium + UiAutomator2 driver
+        run: |
+          npm install -g appium
+          appium driver install uiautomator2
+
+      # Hardware acceleration for the emulator on Linux runners
+      - name: Enable KVM
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+
+      - name: Run tests on emulator
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          arch: x86_64
+          target: google_apis
+          profile: pixel_6
+          disable-animations: true
+          script: npm test
+
+      - name: Upload Appium log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: appium-log
+          path: logs/
