@@ -4,3 +4,4 @@ logs/
 .env
 browserstack.err
 local.log
+log/
