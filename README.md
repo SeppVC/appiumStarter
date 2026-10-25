@@ -45,6 +45,7 @@ config/
 test/
   screens/                    screen objects (page object pattern for apps)
   specs/                      tests (lab.spec.ts = exercise)
+solutions/                    lab solution
 scripts/download-app.mjs      fetches the demo APK
 ```
 
